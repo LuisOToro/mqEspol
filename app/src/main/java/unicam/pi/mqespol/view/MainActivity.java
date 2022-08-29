@@ -3,8 +3,6 @@ package unicam.pi.mqespol.view;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
@@ -17,7 +15,6 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import unicam.pi.mqespol.R;
@@ -44,8 +41,14 @@ public class MainActivity extends AppCompatActivity {
         //setSupportActionBar(toolbar);
         wifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
 
+        try {
+            MqttConnection.connect(getApplicationContext());
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
         Log.i("ACTIVTY", "main activity CREATE");
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {

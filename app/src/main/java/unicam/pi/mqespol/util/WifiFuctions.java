@@ -123,7 +123,6 @@ public class WifiFuctions extends Application {
         @Override
         public void onReceive(Context context, Intent intent) {
             intent.setAction("Extra");
-
         }
     }
 }

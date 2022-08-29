@@ -2,6 +2,9 @@ package unicam.pi.mqespol.mqtt;
 
 import android.app.Application;
 import android.content.Context;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+import android.text.format.Formatter;
 import android.util.AndroidException;
 import android.util.Log;
 import android.widget.Toast;
@@ -32,8 +35,12 @@ public  class MqttConnection {
     public static String clientId = MqttClient.generateClientId();
 
     public static void connect(Context context) throws MqttException {
-            mqttAndroidClient = new MqttAndroidClient(context,"tcp://0.0.0.0:1883",clientId);
-
+        WifiManager wm = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
+        WifiInfo connectionInfo = wm.getConnectionInfo();
+        int ipAddress = connectionInfo.getIpAddress();
+        String ipString = Formatter.formatIpAddress(ipAddress);
+        Log.e("TAG","IP WIFI MANAGER "+ ipString);
+            mqttAndroidClient = new MqttAndroidClient(context,"tcp:"+ipString+":1883",clientId);
             IMqttToken token = mqttAndroidClient.connect();
             token.setActionCallback(new IMqttActionListener() {
                 @Override

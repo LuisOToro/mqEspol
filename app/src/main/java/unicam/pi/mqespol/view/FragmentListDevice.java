@@ -1,6 +1,7 @@
 package unicam.pi.mqespol.view;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import java.util.List;
 import unicam.pi.mqespol.databinding.FragmentListDeviceBinding;
 import unicam.pi.mqespol.model.Device;
+import unicam.pi.mqespol.mqtt.mqttService;
 import unicam.pi.mqespol.util.WifiFuctions;
 import unicam.pi.mqespol.view.adapters.DeviceAdapter;
 import unicam.pi.mqespol.viewModel.DeviceViewModel;
@@ -31,6 +33,8 @@ public class FragmentListDevice extends Fragment {
     private FragmentListDeviceBinding binding;
     private DeviceAdapter deviceAdapter;
 
+    Intent serviceMQTT;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -39,8 +43,8 @@ public class FragmentListDevice extends Fragment {
         if(!WifiFuctions.isHostPotOn){
             WifiFuctions.setWifiOff();
             deviceViewModel.setHotspotOn(getActivity());  //ACTIVAR EL HOSTPOT OnHostPot Wifi
+            initApp();
         }
-
 
         deviceViewModel.getAllDevices().observe(getViewLifecycleOwner(), new Observer<List<Device>>() {
             @Override
@@ -81,6 +85,11 @@ public class FragmentListDevice extends Fragment {
         }).attachToRecyclerView(binding.recyclerView);
     }
 
+    void initApp(){
+        serviceMQTT  = new Intent(getContext(), mqttService.class);
+        this.getContext().startForegroundService(serviceMQTT);
+    }
+
     public void initRecyclerView(){
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.setHasFixedSize(true);
@@ -93,6 +102,12 @@ public class FragmentListDevice extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentListDeviceBinding.inflate(getLayoutInflater());
         return binding.getRoot();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        this.getContext().stopService(serviceMQTT);
     }
 
     public void toast(String msg){

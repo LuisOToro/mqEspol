@@ -3,6 +3,8 @@ package unicam.pi.mqespol.view;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import unicam.pi.mqespol.R;
@@ -31,7 +34,6 @@ import unicam.pi.mqespol.util.WifiFuctions;
 public class MainActivity extends AppCompatActivity {
     public static WifiManager wifiManager;
     ProgressBar progressBar;
-    Intent serviceMQTT;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,21 +41,12 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
-        setSupportActionBar(toolbar);
-        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        initApp();
-        try {
-            MqttConnection.connect(getApplicationContext());
-        } catch (MqttException e) {
-            e.printStackTrace();
-        }
+        //setSupportActionBar(toolbar);
+        wifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
+
         Log.i("ACTIVTY", "main activity CREATE");
     }
 
-    void initApp(){
-       serviceMQTT  = new Intent(MainActivity.this, mqttService.class);
-        this.startForegroundService(serviceMQTT);
-    }
     @Override
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         getMenuInflater().inflate(R.menu.menu,menu);
@@ -107,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        this.stopService(serviceMQTT);
         super.onDestroy();
     }
 }

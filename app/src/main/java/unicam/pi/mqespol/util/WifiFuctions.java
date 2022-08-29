@@ -122,6 +122,8 @@ public class WifiFuctions extends Application {
     static class  WifiReceiever extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+            intent.setAction("Extra");
+
         }
     }
 }

@@ -11,22 +11,28 @@ import java.util.Locale;
  * */
 
 public class util {
-     final static String formated="app_net_";
-      static boolean bandera=false;
+     final static String formated = "app_net_";
+     static boolean bandera = false;
+     public static String TCP = "tcp://";
+     public static final String CLIENT_ID = "mQespol";
 
 
-     public static String getFormated(String network){
-          String[] separated= network.split("_");
-          if(separated.length>=2) {
+     public static String getFormated(String network) {
+          String[] separated = network.split("_");
+          if (separated.length >= 2) {
                String topic = separated[separated.length - 1];
                return topic.toUpperCase(Locale.ROOT);
-          }else{
-               return  null;
+          } else {
+               return null;
           }
      }
 
-     public static Boolean isValid(String text,int position){
-          bandera= position != -1 && !text.trim().isEmpty();
+     public static Boolean isValid(String text, int position) {
+          if (position == -1 || text.trim().isEmpty()) {
+               bandera = false;
+          } else {
+               bandera = true;
+          }
           return bandera;
      }
 

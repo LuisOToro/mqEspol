@@ -22,6 +22,7 @@ import unicam.pi.mqespol.R;
 import unicam.pi.mqespol.mqtt.MqttConnection;
 import unicam.pi.mqespol.mqtt.mqttService;
 import unicam.pi.mqespol.util.WifiFuctions;
+import unicam.pi.mqespol.util.WifiReciber;
 
 /**
  * Proyecto Integrador
@@ -31,6 +32,8 @@ import unicam.pi.mqespol.util.WifiFuctions;
 public class MainActivity extends AppCompatActivity {
     public static WifiManager wifiManager;
     ProgressBar progressBar;
+
+    public static WifiReciber wifiReciever;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,11 +44,6 @@ public class MainActivity extends AppCompatActivity {
         //setSupportActionBar(toolbar);
         wifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
 
-        try {
-            MqttConnection.connect(getApplicationContext());
-        } catch (MqttException e) {
-            e.printStackTrace();
-        }
         Log.i("ACTIVTY", "main activity CREATE");
     }
 
